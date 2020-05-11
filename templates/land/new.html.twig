@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Land{% endblock %}
+
+{% block body %}
+    <h1>Create new Land</h1>
+
+    {{ include('land/_form.html.twig') }}
+
+    <a href="{{ path('land_index') }}">back to list</a>
+{% endblock %}

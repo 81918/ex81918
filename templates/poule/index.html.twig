@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Poule index{% endblock %}
+
+{% block body %}
+    <h1>Poule index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Naam</th>
+                <th>Land1</th>
+                <th>Land2</th>
+                <th>Land3</th>
+                <th>Land4</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for poule in poules %}
+            <tr>
+                <td>{{ poule.id }}</td>
+                <td>{{ poule.naam }}</td>
+                <td>{% if not poule.land1 == NULL %}{{ poule.land1.id }}{% endif %}</td>
+                <td>{% if not poule.land2 == NULL %}{{ poule.land2.id }}{% endif %}</td>
+                <td>{% if not poule.land3 == NULL %}{{ poule.land3.id }}{% endif %}</td>
+                <td>{% if not poule.land4 == NULL %}{{ poule.land4.id }}{% endif %}</td>
+                <td>
+                    <a href="{{ path('poule_show', {'id': poule.id}) }}">show</a>
+                    <a href="{{ path('poule_edit', {'id': poule.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('poule_new') }}">Create new</a>
+{% endblock %}

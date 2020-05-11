@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200511134909 extends AbstractMigration
+final class Version20200511141414 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -25,10 +25,10 @@ final class Version20200511134909 extends AbstractMigration
         $this->addSql('CREATE TABLE app_land (id INT AUTO_INCREMENT NOT NULL, naam VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE app_poule (id INT AUTO_INCREMENT NOT NULL, land1_id INT DEFAULT NULL, land2_id INT DEFAULT NULL, land3_id INT DEFAULT NULL, land4_id INT DEFAULT NULL, naam VARCHAR(255) NOT NULL, INDEX IDX_2CCC668D407C118D (land1_id), INDEX IDX_2CCC668D52C9BE63 (land2_id), INDEX IDX_2CCC668DEA75D906 (land3_id), INDEX IDX_2CCC668D77A2E1BF (land4_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE poule_land (poule_id INT NOT NULL, land_id INT NOT NULL, INDEX IDX_5581D6C926596FD8 (poule_id), UNIQUE INDEX UNIQ_5581D6C91994904A (land_id), PRIMARY KEY(poule_id, land_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668D407C118D FOREIGN KEY (land1_id) REFERENCES app_land (id)');
-        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668D52C9BE63 FOREIGN KEY (land2_id) REFERENCES app_land (id)');
-        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668DEA75D906 FOREIGN KEY (land3_id) REFERENCES app_land (id)');
-        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668D77A2E1BF FOREIGN KEY (land4_id) REFERENCES app_land (id)');
+        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668D407C118D FOREIGN KEY (land1_id) REFERENCES app_land (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668D52C9BE63 FOREIGN KEY (land2_id) REFERENCES app_land (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668DEA75D906 FOREIGN KEY (land3_id) REFERENCES app_land (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE app_poule ADD CONSTRAINT FK_2CCC668D77A2E1BF FOREIGN KEY (land4_id) REFERENCES app_land (id) ON DELETE SET NULL');
         $this->addSql('ALTER TABLE poule_land ADD CONSTRAINT FK_5581D6C926596FD8 FOREIGN KEY (poule_id) REFERENCES app_poule (id)');
         $this->addSql('ALTER TABLE poule_land ADD CONSTRAINT FK_5581D6C91994904A FOREIGN KEY (land_id) REFERENCES app_land (id)');
     }

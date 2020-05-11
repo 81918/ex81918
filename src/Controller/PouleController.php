@@ -129,7 +129,9 @@ class PouleController extends AbstractController
 
         return $this->redirectToRoute('poule_index');
     }
-
+    /**
+     * @Route("/{id}/addland", name="addland", methods={"GET","POST"})
+     */
     public function addLand() {
 
     }

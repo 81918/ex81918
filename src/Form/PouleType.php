@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -57,6 +58,18 @@ class PouleType extends AbstractType
                     return $er->createQueryBuilder('l')
                         ->orderBy('l.naam', 'ASC');
                 },
+            ])
+            ->add('poule_land', EntityType::class, [
+                'class' => Land::class,
+                'choice_label' => 'naam',
+                'placeholder' => 'Kies een land',
+                'required' => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('l')
+                        ->orderBy('l.naam', 'ASC');
+                },
+                'multiple' => true,
+                'expanded' => true
             ]);
     }
 

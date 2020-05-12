@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Stem{% endblock %}
+
+{% block body %}
+    <h1>Create new Stem</h1>
+
+    {{ include('stem/_form.html.twig') }}
+
+    <a href="{{ path('stem_index') }}">back to list</a>
+{% endblock %}

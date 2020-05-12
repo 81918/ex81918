@@ -6,6 +6,7 @@ use App\Entity\Poule;
 use App\Form\PouleType;
 use App\Repository\LandRepository;
 use App\Repository\PouleRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,58 +17,38 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PouleController extends AbstractController
 {
-    private $landResult;
-    private $landen;
-    private $landRepo;
-
-    public function __construct(LandRepository $landRepo)
-    {
-        $landen = [];
-        $landResult = [];
-        $i = 0;
-        // kijg alle Landen die zijn opgeslagen
-        $result = $landRepo->findAll();
-
-        foreach($result as $key => $value) {
-            if ($i == 0) {
-                $landen['Voeg een Land toe'] = '';
-            }
-            // zet array voor form zodat hij een select er mee kan maken
-            $newkey = $value->getNaam() . " id(" . $value->getId() . ")";
-            $landen[$newkey] = $value->getId();
-
-            $landResult[$value->getId()] = $value->getNaam();
-            $i++;
-        }
-
-        $this->landResult = $landResult;
-        $this->landen = $landen;
-        $this->landRepo = $landRepo;
-    }
-
-
     /**
      * @Route("/", name="poule_index", methods={"GET"})
      */
-    public function index(PouleRepository $pouleRepository): Response
+    public function index(PouleRepository $pouleRepository, UserRepository $userRepository): Response
     {
+        $admin = $userRepository->findOneBy(['Username' => "Admin"])->getId();
+        $results = $pouleRepository->findOneBy(['user' => $admin]);
         return $this->render('poule/index.html.twig', [
             'poules' => $pouleRepository->findAll(),
+            'result' => $results
         ]);
     }
 
     /**
      * @Route("/new", name="poule_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, PouleRepository $pouleRepository): Response
     {
+        // haal user op met user id van session
+        $resultUser = $pouleRepository->findOneBy(['user' => $this->getUser()->getId()]);
+
+        // check of user is opgehaald
+        if (!empty($resultUser)) {
+            // ga terug als de user geen stem heeft
+            return $this->redirectToRoute('poule_index');
+        }
+
         $poule = new Poule();
-        $form = $this->createForm(PouleType::class, $poule, [
-            'landen' => $this->landRepo,
-        ]);
+        $form = $this->createForm(PouleType::class, $poule);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $poule->setUser($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($poule);
             $entityManager->flush();
@@ -82,29 +63,21 @@ class PouleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="poule_show", methods={"GET"})
-     */
-    public function show(Poule $poule): Response
-    {
-
-//        $poule->setLand1($this->landResult[$poule->getLand1()]);
-
-        return $this->render('poule/show.html.twig', [
-            'poule' => $poule,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="poule_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Poule $poule): Response
     {
-        $form = $this->createForm(PouleType::class, $poule, [
-        'landen' => $this->landen,
-        ]);
+        // check of de user deze poule heeft aangemaakt
+        if ($poule->getUser()->getId() !== $this->getUser()->getId()) {
+            // ga terug als de user geen stem heeft
+            return $this->redirectToRoute('poule_index');
+        }
+        $form = $this->createForm(PouleType::class, $poule);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $form->getData();
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('poule_index');
@@ -128,11 +101,5 @@ class PouleController extends AbstractController
         }
 
         return $this->redirectToRoute('poule_index');
-    }
-    /**
-     * @Route("/{id}/addland", name="addland", methods={"GET","POST"})
-     */
-    public function addLand() {
-
     }
 }

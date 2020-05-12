@@ -3,34 +3,66 @@
 {% block title %}Poule index{% endblock %}
 
 {% block body %}
-    <h1>Poule index</h1>
+    <h1>Poule Result</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Naam</th>
                 <th>Land1</th>
                 <th>Land2</th>
                 <th>Land3</th>
                 <th>Land4</th>
+                <th>User</th>
+                {% if not result == NULL %}
+                    <th>punten</th>
+                {% endif %}
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
+        {# zet stem als default #}
+        {% set stem = false %}
+
         {% for poule in poules %}
-            <tr>
-                <td>{{ poule.id }}</td>
-                <td>{{ poule.naam }}</td>
-                <td>{% if not poule.land1 == NULL %}{{ poule.land1.id }}{% endif %}</td>
-                <td>{% if not poule.land2 == NULL %}{{ poule.land2.id }}{% endif %}</td>
-                <td>{% if not poule.land3 == NULL %}{{ poule.land3.id }}{% endif %}</td>
-                <td>{% if not poule.land4 == NULL %}{{ poule.land4.id }}{% endif %}</td>
-                <td>
-                    <a href="{{ path('poule_show', {'id': poule.id}) }}">show</a>
-                    <a href="{{ path('poule_edit', {'id': poule.id}) }}">edit</a>
-                </td>
-            </tr>
+            {# check of user als een stem heeft gemaakt #}
+            {% if poule.user.getUsername() == app.user.getUsername() %}
+                {% set stem = true %}
+            {% endif %}
+
+            {% if poule.user.getUsername() == "Admin" %}
+            {% else %}
+                <tr>
+                    <td>{{ poule.id }}</td>
+                    <td>{% if not poule.land1 == NULL %}{{ poule.land1.naam }}{% endif %}</td>
+                    <td>{% if not poule.land2 == NULL %}{{ poule.land2.naam }}{% endif %}</td>
+                    <td>{% if not poule.land3 == NULL %}{{ poule.land3.naam }}{% endif %}</td>
+                    <td>{% if not poule.land4 == NULL %}{{ poule.land4.naam }}{% endif %}</td>
+                    <td>{{ poule.user.getUsername() }}</td>
+                    {% if not result == NULL %}
+                        {% set punt1 = 0 %}
+                        {% set punt2 = 0 %}
+                        {% set punt3 = 0 %}
+                        {% set punt4 = 0 %}
+                        {% if result.land1 == poule.land1 %}
+                            {% set punt1 = 10 %}
+                        {% endif %}
+                        {% if result.land2 == poule.land2 %}
+                            {% set punt2 = 4 %}
+                        {% endif %}
+                        {% if result.land3 == poule.land3 %}
+                            {% set punt3 = 6 %}
+                        {% endif %}
+                        {% if result.land4 == poule.land4 %}
+                            {% set punt4 = 10 %}
+                        {% endif %}
+                        <td>{{ punt1 + punt2 +punt3 + punt4 }}</td>
+                    {% endif %}
+                    <td>
+                        {% if poule.user.getUsername() == app.user.getUsername() %}<a href="{{ path('poule_edit', {'id': poule.id}) }}">edit</a>{% endif %}
+                    </td>
+                </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="7">no records found</td>
@@ -39,5 +71,7 @@
         </tbody>
     </table>
 
+    {% if not stem == true %}
     <a href="{{ path('poule_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

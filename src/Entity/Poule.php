@@ -24,11 +24,6 @@ class Poule
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $naam;
-
-    /**
      * @ManyToOne(targetEntity="Land")
      * @JoinColumn(name="land1_id", referencedColumnName="id",  onDelete="SET NULL")
      */
@@ -53,14 +48,10 @@ class Poule
     private $land4;
 
     /**
-     * Many User have Many Phonenumbers.
-     * @ManyToMany(targetEntity="Land")
-     * @JoinTable(name="poule_land",
-     *      joinColumns={@JoinColumn(name="poule_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="land_id", referencedColumnName="id", unique=true)}
-     *      )
+     * @ManyToOne(targetEntity="User")
+     * @JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $poule_land;
+    private $user;
 
     public function __construct()
     {
@@ -70,18 +61,6 @@ class Poule
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNaam(): ?string
-    {
-        return $this->naam;
-    }
-
-    public function setNaam(string $naam): self
-    {
-        $this->naam = $naam;
-
-        return $this;
     }
 
     /**
@@ -95,7 +74,7 @@ class Poule
     /**
      * @param mixed $land1
      */
-    public function setLand1($land1): void
+    public function setLand1(Land $land1): void
     {
         $this->land1 = $land1;
     }
@@ -111,7 +90,7 @@ class Poule
     /**
      * @param mixed $land2
      */
-    public function setLand2($land2): void
+    public function setLand2(Land $land2): void
     {
         $this->land2 = $land2;
     }
@@ -127,7 +106,7 @@ class Poule
     /**
      * @param mixed $land3
      */
-    public function setLand3($land3): void
+    public function setLand3(Land $land3): void
     {
         $this->land3 = $land3;
     }
@@ -143,14 +122,24 @@ class Poule
     /**
      * @param mixed $land4
      */
-    public function setLand4($land4): void
+    public function setLand4(Land $land4): void
     {
         $this->land4 = $land4;
     }
 
-
-    public function getPouleLand(): ArrayCollection
+    /**
+     * @return mixed
+     */
+    public function getUser()
     {
-        return $this->poule_land;
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
     }
 }

@@ -30,25 +30,25 @@ class Poule
 
     /**
      * @ManyToOne(targetEntity="Land")
-     * @JoinColumn(name="land1_id", referencedColumnName="id")
+     * @JoinColumn(name="land1_id", referencedColumnName="id",  onDelete="SET NULL")
      */
     private $land1;
 
     /**
      * @ManyToOne(targetEntity="Land")
-     * @JoinColumn(name="land2_id", referencedColumnName="id")
+     * @JoinColumn(name="land2_id", referencedColumnName="id",  onDelete="SET NULL")
      */
     private $land2;
 
     /**
      * @ManyToOne(targetEntity="Land")
-     * @JoinColumn(name="land3_id", referencedColumnName="id")
+     * @JoinColumn(name="land3_id", referencedColumnName="id",  onDelete="SET NULL")
      */
     private $land3;
 
     /**
      * @ManyToOne(targetEntity="Land")
-     * @JoinColumn(name="land4_id", referencedColumnName="id")
+     * @JoinColumn(name="land4_id", referencedColumnName="id",  onDelete="SET NULL")
      */
     private $land4;
 

@@ -24,7 +24,7 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/", name="user_index")
      */
     public function index(UserRepository $userRepository) {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');

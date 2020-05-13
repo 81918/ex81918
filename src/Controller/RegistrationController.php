@@ -109,18 +109,18 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/{id}", name="user_delete")
      */
-    public function delete(Request $request, Poule $poule): Response
+    public function delete(Request $request, User $user): Response
     {
         // check of crsf token klopt
-        if ($this->isCsrfTokenValid('delete'.$poule->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
 
             // laat doctrine het verwijderen
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($poule);
+            $entityManager->remove($user);
             $entityManager->flush();
         }
 
-        // redirect 
+        // redirect
         return $this->redirectToRoute('poule_index');
     }
 }

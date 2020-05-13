@@ -63,7 +63,12 @@
                         {% if result.land4 == poule.land4 %}
                             {% set punt4 = 10 %}
                         {% endif %}
-                        <td>{{ punt1 + punt2 +punt3 + punt4 }}</td>
+                        {% set punten = punt1 + punt2 +punt3 + punt4 %}
+                        {% if poule.land1 in result %}{% set punten = punten + 1 %} {% endif %}
+                        {% if poule.land2 in result %}{% set punten = punten + 1 %} {% endif %}
+                        {% if poule.land3 in result %}{% set punten = punten + 1 %} {% endif %}
+                        {% if poule.land4 in result %}{% set punten = punten + 1 %} {% endif %}
+                        <td>{{ punten }}</td>
                     {% endif %}
                     <td>
                         {% if poule.user.getUsername() == app.user.getUsername() %}<a href="{{ path('poule_edit', {'id': poule.id}) }}">edit</a>{% endif %}

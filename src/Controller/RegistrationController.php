@@ -27,7 +27,10 @@ class RegistrationController extends AbstractController
      * @Route("/", name="user_index")
      */
     public function index(UserRepository $userRepository) {
+        // stuur user naar inlog als hij niet de goede rol heeft
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        // render template
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
@@ -38,14 +41,18 @@ class RegistrationController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
+        // stuur user naar inlog als hij niet de goede rol heeft
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $user = new User();
 
+        // maak een nieuwe user aan en maak daar van een form
+        $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        // check of het is op gestuurd is en klopt
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+
+            // encode the onaangepaste password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -53,10 +60,12 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            // laat doctrine user opslaan
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
+            // verstuur mail
             $email = (new Email())
                 ->from('kelvinjwz14@gmail.com')
                 ->to(new Address($form->get('Email')->getData()))
@@ -86,9 +95,12 @@ class RegistrationController extends AbstractController
                 'success',
                 'User: ' . $user->getUsername(). 'is toegevoegd!'
             );
+
+            // render redirect
             return $this->redirectToRoute('add_user');
         }
 
+        // render form
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
@@ -99,12 +111,16 @@ class RegistrationController extends AbstractController
      */
     public function delete(Request $request, Poule $poule): Response
     {
+        // check of crsf token klopt
         if ($this->isCsrfTokenValid('delete'.$poule->getId(), $request->request->get('_token'))) {
+
+            // laat doctrine het verwijderen
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($poule);
             $entityManager->flush();
         }
 
+        // redirect 
         return $this->redirectToRoute('poule_index');
     }
 }

@@ -3,12 +3,11 @@
 {% block title %}Poule index{% endblock %}
 
 {% block body %}
-    <h1>Poule Result</h1>
+    <h1>Poule resultaten</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Land1</th>
                 <th>Land2</th>
                 <th>Land3</th>
@@ -17,7 +16,7 @@
                 {% if not result == NULL %}
                     <th>punten</th>
                 {% endif %}
-                <th>actions</th>
+                <th>Acties</th>
             </tr>
         </thead>
         <tbody>
@@ -30,10 +29,18 @@
                 {% set stem = true %}
             {% endif %}
 
-            {% if poule.user.getUsername() == "Admin" %}
+            {% if poule.user.getUsername() == "Admin" and app.user.getUsername() == "Admin"%}
+                <td>{% if not poule.land1 == NULL %}{{ poule.land1.naam }}{% endif %}</td>
+                <td>{% if not poule.land2 == NULL %}{{ poule.land2.naam }}{% endif %}</td>
+                <td>{% if not poule.land3 == NULL %}{{ poule.land3.naam }}{% endif %}</td>
+                <td>{% if not poule.land4 == NULL %}{{ poule.land4.naam }}{% endif %}</td>
+                <td>{{ poule.user.getUsername() }}</td>
+                <td>Resultaat</td>
+                {% if poule.user.getUsername() == app.user.getUsername() %}
+                    <td><a href="{{ path('poule_edit', {'id': poule.id}) }}">edit</a></td>
+                {% endif %}
             {% else %}
                 <tr>
-                    <td>{{ poule.id }}</td>
                     <td>{% if not poule.land1 == NULL %}{{ poule.land1.naam }}{% endif %}</td>
                     <td>{% if not poule.land2 == NULL %}{{ poule.land2.naam }}{% endif %}</td>
                     <td>{% if not poule.land3 == NULL %}{{ poule.land3.naam }}{% endif %}</td>
@@ -65,13 +72,17 @@
             {% endif %}
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="7">Geen stem gevonden</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
     {% if not stem == true %}
-    <a href="{{ path('poule_new') }}">Create new</a>
+        {% if app.user.getUsername() == "Admin" %}
+            <a href="{{ path('poule_new') }}">Geef resultaat door</a>
+        {% else %}
+            <a href="{{ path('poule_new') }}">Maak een nieuwe stem aan</a>
+        {% endif %}
     {% endif %}
 {% endblock %}

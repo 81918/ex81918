@@ -3,9 +3,13 @@
 {% block title %}New Poule{% endblock %}
 
 {% block body %}
-    <h1>Create new Poule</h1>
+    {% if app.user.getUsername() == "Admin" %}
+        <h1>Stuur resultaten op</h1>
+    {% else %}
+        <h1>Maak een nieuwe stem aan</h1>
+    {% endif %}
 
     {{ include('poule/_form.html.twig') }}
 
-    <a href="{{ path('poule_index') }}">back to list</a>
+    <a href="{{ path('poule_index') }}">Ga terug naar dashboard</a>
 {% endblock %}

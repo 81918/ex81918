@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Voeg user toe{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <h1>Voeg user toe</h1>
     {% for message in app.flashes('success') %}
         <div class="flash-notice">
             {{ message }}
@@ -15,6 +15,6 @@
         {{ form_row(registrationForm.plainPassword) }}
         {{ form_row(registrationForm.Email) }}
 
-        <button class="btn">Add user</button>
+        <button class="btn">Voeg user toe</button>
     {{ form_end(registrationForm) }}
 {% endblock %}

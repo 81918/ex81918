@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Poule{% endblock %}
+
+{% block body %}
+    {% if app.user.getUsername() == "Admin" %}
+        <h1>Stuur resultaten op</h1>
+    {% else %}
+        <h1>Maak een nieuwe stem aan</h1>
+    {% endif %}
+
+    {{ include('poule/_form.html.twig') }}
+
+    <a href="{{ path('poule_index') }}">Ga terug naar dashboard</a>
+{% endblock %}

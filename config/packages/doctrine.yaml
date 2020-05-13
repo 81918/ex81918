@@ -1,6 +1,13 @@
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%'
+#        url: '%env(resolve:DATABASE_URL)%'
+        dbname: '%env(resolve:DBNAME)%'
+        host: '%env(resolve:DB_HOST)%'
+        port: '%env(resolve:DB_PORT)%'
+        user: '%env(resolve:DB_USER)%'
+        password: '%env(resolve:DB_PW)%'
+        driver: '%env(resolve:DB_DRIVER)%'
+#        unix_socket: /tmp/mysql.sock
 
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)

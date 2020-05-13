@@ -2,10 +2,22 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Welkom!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% if app.user %}
+            {% if app.user.username == 'Admin' %}
+            <nav>
+                <a href="{{ path('user_index') }}">Users</a>
+                <a href="{{ path('poule_index') }}">Poule</a>
+                <a href="{{ path('land_index') }}">Land</a>
+            </nav>
+            {% endif %}
+        <div class="mb-3">
+            Hallo {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+        {% endif %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

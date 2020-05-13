@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <h1>User dashboard</h1>
+    <a href="{{ path('add_user') }}">Voeg user toe</a>
+    <table>
+        <tr>
+            <th>username</th>
+            <th>Acties</th>
+        </tr>
+    {% for user in users %}
+        <tr>
+            {% if app.user.username == user.username %}
+
+            {% else %}
+                <td>{{ user.username }}</td>
+                <td>{{ include('user/_delete_form.html.twig') }}</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
